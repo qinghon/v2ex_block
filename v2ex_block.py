@@ -21,6 +21,13 @@ class Block():
         self.lv2 = [v for k, v in b_list.items("level2")]
         self.lv3 = [v for k, v in b_list.items("level3")]
 
+    def get_cookie_from_file(self,cookie_name):
+        with open(cookie_name,'r',encoding='utf-8') as cf:
+            c_str=cf.read()
+        if c_str == '':
+            return 1
+        else:
+            return c_str
     def block_list(self, list, tag=1):
         #list=[]
         #tag is block or unblock tag 1 or 0
@@ -41,17 +48,19 @@ class Block():
             for id in list:
                 unblock_post(id)
 
-    def login(self, cookie_str):
-        cookies = {}
+    def set_c(self, cookie_str):
 
-        def format_str(cookie_str):
-            if '"' in cookie_str:
-                return cookie_str.replace('"', '')
+        def format_cookie(cookie_str):
+            cookies = {}
+            def format_str(cookie_str):
+                if '"' in cookie_str:
+                    return cookie_str.replace('"', '')
 
-        for line in format_str(cookie_str).split(';'):
-            key, v = line.strip().split('=', 1)
-            cookies[key] = v
-        requests.utils.add_dict_to_cookiejar(self.S.cookies, cookies)
+            for line in format_str(cookie_str).split(';'):
+                key, v = line.strip().split('=', 1)
+                cookies[key] = v
+            return cookies
+        requests.utils.add_dict_to_cookiejar(self.S.cookies, format_cookie(cookie_str))
 
 
 def command():
@@ -59,11 +68,11 @@ def command():
         print("""
         python v2ex_block.py -c "cookie" -f "ini_filename" -l "block level" -[bu]
         [options]
-        -h, --help \t\tget option help
-        -c, --cookie \t\tadd cookie 
-        -f, --file  \t\tadd block list file name 
-        -l, --level \t\tblock list level ,defult 1
-        -b, --block \t\t
+        -h, --help \t\tGet option help
+        -c, --cookie \t\tAdd cookie str or saved cookie file (No more than 10 characters.)
+        -f, --file  \t\tAdd block list file name 
+        -l, --level \t\tBlock list level ,defult 1
+        -b, --block \t\tDefult block
         -u, --unblock\t\t
         """)
 
@@ -87,7 +96,7 @@ def command():
             c_help()
             sys.exit(1)
         elif o in ("-c", "--cookie"):
-            cookie = a
+            cookie=a
         elif o in ("-f", "--file"):
             file_name = a
         elif o in ("-l","--level"):
@@ -108,7 +117,17 @@ def command():
 if __name__ == '__main__':
     cookie, filename ,level,tag= command()
     b = Block()
-    b.login(cookie)
+    if len(cookie)>10:
+
+        b.set_c(cookie)
+    else:
+        cookie_str=b.get_cookie_from_file(cookie)
+        if cookie_str!=1:
+            b.set_c(cookie_str)
+        else:
+            print("Please put cookie in the file.")
+            sys.exit(1)
+
     b.get_name_from_file(filename)
     if level==1:
         b.block_list(b.lv1,tag)
