@@ -96,11 +96,11 @@ def command():
             c_help()
             sys.exit(1)
         elif o in ("-c", "--cookie"):
-            cookie=a
+            cookie = a
         elif o in ("-f", "--file"):
             file_name = a
         elif o in ("-l","--level"):
-            level=a
+            level = a
         elif o in ("b","block"):
             tag=1
         elif o in ("u","unblock"):
