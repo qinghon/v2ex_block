@@ -10,11 +10,11 @@ block名单用的ini文件格式(比较好读)
 ```
 python v2ex_block.py -c "cookie" -f "ini_filename" -l "block level" -[bu]
         [options]
-        -h, --help \t\tGet option help
-        -c, --cookie \t\tAdd cookie str or saved cookie file name (No more than 10 characters.)
-        -f, --file  \t\tAdd block list file name 
-        -l, --level \t\tBlock list level ,defult 1
-        -b, --block \t\tDefult block
-        -u, --unblock\t\t
+        -h, --help        Get option help
+        -c, --cookie      Add cookie str or saved cookie file name (No more than 10 characters.)
+        -f, --file        Add block list file name 
+        -l, --level       Block list level ,defult 1
+        -b, --block       Defult block
+        -u, --unblock
 ```
 欢迎引用和提交
